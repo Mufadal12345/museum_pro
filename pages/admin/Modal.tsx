@@ -13,6 +13,7 @@ export const Modal: React.FC<ModalProps> = ({
   title,
   children,
 }) => {
+  // دالة اكتشاف اللغة
   const isArabic = (text: string) => /[\u0600-\u06FF]/.test(text);
   const dir = isArabic(title) ? "rtl" : "ltr";
 
@@ -29,21 +30,24 @@ export const Modal: React.FC<ModalProps> = ({
 
   return (
     <div 
-      // التعديل هنا: استخدام items-start مع pt-[15vh] لسحبها للأسفل بمقدار مريح
-      className="fixed inset-0 z-[999] flex items-start justify-center bg-black/85 backdrop-blur-lg p-4 overflow-y-auto pt-[15vh] pb-10"
+      className="fixed inset-0 z-[999] flex items-center justify-center bg-black/85 backdrop-blur-lg p-3 md:p-6"
       onClick={onClose} 
     >
+      {/* التعديلات لتحقيق مظهر "الكتلة الواحدة":
+         1. items-center: لمركزة النافذة في وسط الشاشة تماماً.
+         2. h-auto & max-h-[92vh]: لتجعل النافذة وحدة واحدة تتمدد حسب المحتوى دون قص.
+         3. shadow-white/5: إضافة توهج خفيف لتبدو ككتلة بارزة.
+      */}
       <div 
         dir={dir}
-        // التعديل هنا: جعلنا الارتفاع مرن h-fit لتبقى كتلة واحدة متصلة
-        className={`glass-dark rounded-[2.5rem] w-full max-w-lg shadow-2xl border border-white/10 animate-slide-up relative 
-          flex flex-col h-fit min-h-[500px] transition-all duration-500
+        className={`glass-dark rounded-[2.5rem] w-full max-w-lg shadow-[0_0_50px_rgba(255,255,255,0.05)] 
+          border border-white/10 animate-scale-in relative flex flex-col h-auto max-h-[92vh] transition-all duration-500
           ${dir === "rtl" ? "font-tajawal text-right" : "font-sans text-left"}`}
         onClick={(e) => e.stopPropagation()} 
       >
         
-        {/* رأس النافذة */}
-        <div className={`p-7 pb-2 flex justify-between items-center ${dir === 'rtl' ? 'flex-row' : 'flex-row-reverse'}`}>
+        {/* رأس النافذة - مدمج بانسيابية */}
+        <div className={`p-6 pb-2 flex justify-between items-center ${dir === 'rtl' ? 'flex-row' : 'flex-row-reverse'}`}>
           <div className="flex flex-col">
             <h3 className="text-xl md:text-2xl font-bold gradient-text leading-tight">{title}</h3>
             <span className="text-[10px] text-pink-400/70 font-tajawal">
@@ -59,15 +63,15 @@ export const Modal: React.FC<ModalProps> = ({
           </button>
         </div>
 
-        {/* محتوى النافذة - مساحة داخلية متوازنة لضمان ظهور زر النشر */}
-        <div className="px-7 py-4 pb-20">
+        {/* منطقة المحتوى - تم تقليل الحواشي (Padding) لتظهر الكتلة متصلة ببعضها */}
+        <div className="px-6 py-4 overflow-visible">
           {children}
         </div>
 
-        {/* تذييل النافذة - مدمج في أسفل الكتلة */}
-        <div className="absolute bottom-6 left-0 w-full text-center">
-           <div className="h-[1px] w-12 bg-white/10 mx-auto mb-3"></div>
-           <p className="text-[9px] text-gray-500 uppercase tracking-[0.3em] font-bold opacity-60">
+        {/* تذييل النافذة - ملتصق بالكتلة وليس بعيداً عنها */}
+        <div className="pb-6 pt-2 text-center shrink-0">
+           <div className="h-[1px] w-1/4 bg-white/5 mx-auto mb-4"></div>
+           <p className="text-[9px] text-gray-500 uppercase tracking-[0.3em] font-bold">
              DEVELOPED BY MU_CS_01 | 2026
            </p>
         </div>

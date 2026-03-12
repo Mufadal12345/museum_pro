@@ -1,0 +1,889 @@
+<!doctype html>
+<html lang="ar" dir="rtl" class="h-full">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
+    />
+    <title>متحف الفكر - بوابة الإبداع الفكري</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Tajawal:wght@300;400;500;700;800&family=Amiri:wght@400;700&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
+    <link rel="stylesheet" href="style.css" />
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            colors: {
+              dark: "#0f172a",
+              card: "#1e293b",
+              primary: "#6366f1",
+              accent: "#ec4899",
+              glow: "#f59e0b",
+            },
+            fontFamily: {
+              tajawal: ["Tajawal", "sans-serif"],
+              amiri: ["Amiri", "serif"],
+            },
+          },
+        },
+      };
+    </script>
+  </head>
+  <body
+    class="h-full w-full text-gray-200 overflow-hidden selection:bg-accent selection:text-white"
+  >
+    <div id="app" class="h-full flex bg-[#0a0f1f]">
+      <!-- Mobile Header -->
+      <div
+        class="md:hidden fixed top-0 left-0 right-0 z-40 p-4 pointer-events-none flex justify-end"
+      >
+        <button
+          id="mobile-menu-btn"
+          class="w-12 h-12 rounded-full bg-slate-900/80 backdrop-blur-md border border-white/10 flex items-center justify-center text-white shadow-lg active:scale-95 transition-all pointer-events-auto hover:bg-white/10 hidden"
+        >
+          <i class="fas fa-bars text-xl"></i>
+        </button>
+      </div>
+
+      <!-- Sidebar Overlay -->
+      <div
+        id="sidebar-overlay"
+        class="fixed inset-0 bg-black/70 z-40 hidden md:hidden"
+      ></div>
+
+      <!-- Sidebar -->
+      <aside
+        id="sidebar"
+        class="fixed md:relative top-0 right-0 h-full w-64 glass-sidebar z-50 transition-transform duration-300 transform translate-x-full md:translate-x-0 flex flex-col hidden"
+      >
+        <div class="p-6 border-b border-white/10">
+          <div class="flex items-center gap-3">
+            <span class="text-3xl">🏛️</span>
+            <div>
+              <h1 class="text-xl font-bold gradient-text font-amiri">
+                متحف الفكر
+              </h1>
+              <p id="user-role-text" class="text-xs text-gray-400">👤 زائر</p>
+            </div>
+          </div>
+        </div>
+
+        <nav
+          class="flex-1 p-4 space-y-2 overflow-auto scrollbar-hide"
+          id="nav-links"
+        >
+          <!-- Links injected by JS -->
+        </nav>
+
+        <div class="p-4 border-t border-white/10">
+          <div class="glass-card rounded-xl p-3 mb-3">
+            <div class="flex items-center gap-3">
+              <div
+                id="user-avatar"
+                class="w-12 h-12 rounded-full bg-gradient-to-br from-pink-500 to-orange-500 flex items-center justify-center text-xl shadow-lg avatar-pulse"
+              >
+                👤
+              </div>
+              <div class="flex-1 min-w-0">
+                <p id="user-name-text" class="font-bold text-sm truncate">
+                  المستخدم
+                </p>
+                <p
+                  id="user-specialty-text"
+                  class="text-xs text-gray-400 truncate"
+                >
+                  عضو
+                </p>
+              </div>
+            </div>
+          </div>
+          <button
+            id="logout-btn"
+            class="btn-secondary w-full py-2 rounded-xl text-sm flex items-center justify-center gap-2 hover:bg-white/20"
+          >
+            <span>🚪</span>
+            <span>تسجيل الخروج</span>
+          </button>
+        </div>
+      </aside>
+
+      <!-- Main Content -->
+      <main
+        class="flex-1 overflow-auto relative pt-16 md:pt-0"
+        id="main-content"
+      >
+        <!-- Global Loader -->
+        <div
+          id="global-loader"
+          class="absolute inset-0 z-50 bg-[#0a0f1f] flex items-center justify-center"
+        >
+          <div
+            class="w-12 h-12 border-4 border-pink-500 border-t-transparent rounded-full animate-spin"
+          ></div>
+        </div>
+
+        <div
+          id="views-container"
+          class="h-full w-full max-w-7xl mx-auto p-3 md:p-8"
+        >
+          <!-- Login View -->
+          <div
+            id="view-login"
+            class="view hidden h-full flex items-center justify-center"
+          >
+            <div
+              class="glass-card rounded-3xl p-6 md:p-10 w-full max-w-md animate-fade-in relative z-10"
+            >
+              <div class="text-center mb-8">
+                <div class="mb-6 flex justify-center">
+                  <span class="text-6xl">🏛️</span>
+                </div>
+                <h1 class="text-3xl font-bold gradient-text font-amiri mb-3">
+                  متحف الفكر
+                </h1>
+                <p class="text-base font-bold text-yellow-300 mb-1">
+                  🎓 جامعة زيان عاشور بالجلفة
+                </p>
+                <p class="text-gray-400 text-sm mb-4">
+                  بوابة الإبداع الفكرية الرقمية
+                </p>
+              </div>
+
+              <div
+                id="login-error"
+                class="hidden mb-4 p-3 bg-red-500/20 border border-red-500/50 rounded-xl text-red-200 text-sm text-center"
+              ></div>
+
+              <div id="auth-form-container" class="space-y-4">
+                <div id="register-fields" class="hidden space-y-4">
+                  <input
+                    type="text"
+                    id="auth-name"
+                    placeholder="اسم المستخدم"
+                    class="input-style w-full px-4 py-3 rounded-xl"
+                  />
+                  <input
+                    type="text"
+                    id="auth-specialty"
+                    placeholder="التخصص (اختياري)"
+                    class="input-style w-full px-4 py-3 rounded-xl"
+                  />
+                </div>
+                <input
+                  type="email"
+                  id="auth-email"
+                  placeholder="البريد الإلكتروني"
+                  class="input-style w-full px-4 py-3 rounded-xl"
+                />
+                <input
+                  type="password"
+                  id="auth-password"
+                  placeholder="كلمة المرور"
+                  class="input-style w-full px-4 py-3 rounded-xl"
+                />
+
+                <div class="text-right">
+                  <button
+                    id="toggle-auth-mode"
+                    class="text-pink-400 hover:text-pink-300 text-sm font-medium p-2"
+                  >
+                    إنشاء حساب جديد
+                  </button>
+                </div>
+
+                <button
+                  id="btn-auth-submit"
+                  class="btn-primary w-full py-3.5 rounded-xl text-lg"
+                >
+                  تسجيل الدخول
+                </button>
+              </div>
+
+              <div class="flex items-center my-6">
+                <div class="flex-1 h-px bg-white/10"></div>
+                <span class="px-3 text-sm text-gray-500">أو</span>
+                <div class="flex-1 h-px bg-white/10"></div>
+              </div>
+
+              <button
+                id="btn-google-login"
+                class="w-full bg-white text-gray-800 py-3.5 rounded-xl font-bold flex items-center justify-center gap-3 hover:bg-gray-100 transition-colors mb-4"
+              >
+                <i class="fab fa-google text-red-500"></i> دخول بحساب جوجل
+              </button>
+
+              <div class="text-center mt-4 border-t border-white/5 pt-4">
+                <button
+                  id="toggle-admin-login"
+                  class="text-gray-500 hover:text-white text-xs transition"
+                >
+                  <i class="fas fa-shield-alt"></i> دخول المشرف
+                </button>
+              </div>
+              <div
+                id="admin-login-fields"
+                class="hidden mt-4 p-4 border border-red-500/30 rounded-xl bg-red-500/5"
+              >
+                <p class="text-xs text-red-400 mb-3">
+                  <i class="fas fa-exclamation-triangle"></i> منطقة محظورة. دخول
+                  المشرفين فقط.
+                </p>
+                <input
+                  type="password"
+                  id="admin-secret-code"
+                  placeholder="رمز الدخول السري"
+                  class="input-style w-full px-4 py-3 rounded-xl mb-3 border-red-500/50 focus:border-red-500"
+                />
+                <button
+                  id="btn-admin-submit"
+                  class="w-full bg-red-600 hover:bg-red-700 text-white py-3 rounded-xl font-bold transition"
+                >
+                  دخول المشرف
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Home View -->
+          <div id="view-home" class="view hidden">
+            <div class="animate-fade-in">
+              <div
+                class="glass rounded-3xl p-8 md:p-12 mb-10 text-center relative overflow-hidden"
+              >
+                <div
+                  class="absolute top-0 left-0 w-full h-full bg-gradient-to-br from-accent/10 to-transparent"
+                ></div>
+                <h2
+                  class="text-4xl md:text-5xl font-bold mb-4 font-amiri gradient-text"
+                  id="home-welcome"
+                >
+                  مرحباً
+                </h2>
+                <p class="text-gray-400 font-tajawal max-w-2xl mx-auto">
+                  أهلاً بك في فضاء جامعة زيان عاشور بالجلفة الفكري. هنا تُحفظ
+                  الأفكار وتُبنى العقول.
+                </p>
+              </div>
+
+              <div id="home-qod"></div>
+
+              <div
+                class="grid grid-cols-2 lg:grid-cols-4 gap-6 mb-12"
+                id="home-stats"
+              >
+                <!-- Stats injected by JS -->
+              </div>
+
+              <div id="home-best-comments"></div>
+
+              <div class="flex justify-between items-center mb-6">
+                <h3 class="text-2xl font-bold font-amiri">أحدث المقالات</h3>
+                <button
+                  onclick="window.navigateTo('feed')"
+                  class="text-accent font-bold hover:underline"
+                >
+                  عرض الكل ←
+                </button>
+              </div>
+
+              <div
+                class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6"
+                id="home-latest-ideas"
+              >
+                <!-- Latest ideas injected by JS -->
+              </div>
+            </div>
+          </div>
+
+          <!-- Feed View -->
+          <div id="view-feed" class="view hidden h-full flex flex-col">
+            <div class="flex justify-between items-center mb-6">
+              <div>
+                <h2 class="text-3xl font-bold font-amiri text-white mb-2">
+                  تصفح الأفكار
+                </h2>
+                <p class="text-gray-400 text-sm">
+                  شارك أفكارك وإبداعاتك مع المجتمع
+                </p>
+              </div>
+              <div class="flex gap-2">
+                <button
+                  onclick="window.navigateTo('reels')"
+                  class="px-5 py-2.5 bg-indigo-600 rounded-full hover:bg-indigo-700 transition font-bold shadow-lg shadow-indigo-500/30 flex items-center gap-2"
+                >
+                  <i class="fas fa-play"></i>
+                  <span class="hidden md:inline">تصفح سريع</span>
+                </button>
+                <button
+                  onclick="window.openModal('add-idea')"
+                  class="px-5 py-2.5 bg-pink-600 rounded-full hover:bg-pink-700 transition font-bold shadow-lg shadow-pink-500/30 flex items-center gap-2"
+                >
+                  <i class="fas fa-plus"></i>
+                  <span class="hidden md:inline">إضافة فكرة</span>
+                </button>
+              </div>
+            </div>
+            <div class="flex-1 overflow-y-auto custom-scrollbar pr-2">
+              <div
+                class="max-w-2xl mx-auto space-y-6 pb-20"
+                id="feed-container"
+              >
+                <!-- Feed items injected by JS -->
+              </div>
+            </div>
+          </div>
+
+          <!-- Content View -->
+          <div id="view-content" class="view hidden h-full flex flex-col">
+            <header class="mb-6 text-center md:text-right">
+              <h1
+                class="text-3xl font-bold text-white neon-text font-tajawal mb-2"
+              >
+                المحتوى المعرفي
+              </h1>
+              <p class="text-gray-400 text-sm">
+                مقالات علمية، نصوص أدبية، وتحليلات تقنية من نخبة مفكرينا
+              </p>
+            </header>
+            <nav
+              class="flex gap-4 overflow-x-auto pb-4 scrollbar-hide mb-4"
+              id="content-filters"
+            >
+              <!-- Filters injected by JS -->
+            </nav>
+            <div class="flex-1 overflow-y-auto custom-scrollbar pr-2">
+              <div
+                class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 pb-20"
+                id="content-container"
+              >
+                <!-- Content items injected by JS -->
+              </div>
+            </div>
+          </div>
+
+          <!-- Philosophy View -->
+          <div id="view-philosophy" class="view hidden h-full flex flex-col">
+            <div
+              class="relative rounded-2xl overflow-hidden mb-8 h-64 border border-white/10 group"
+            >
+              <div
+                class="absolute inset-0 bg-gradient-to-r from-gray-900 to-indigo-950"
+              ></div>
+              <div class="absolute inset-0 flex items-center justify-center">
+                <div class="text-center z-10">
+                  <i
+                    class="fas fa-brain text-5xl text-yellow-400 mb-4 animate-pulse"
+                  ></i>
+                  <h1
+                    class="text-4xl md:text-5xl font-bold font-amiri mb-2 text-white neon-text"
+                  >
+                    رواق الفلسفة
+                  </h1>
+                  <p class="text-gray-300 font-amiri text-lg opacity-80">
+                    "الحكمة هي ضالة المؤمن، أنى وجدها فهو أحق بها"
+                  </p>
+                </div>
+              </div>
+              <button
+                onclick="window.openModal('add-philosophy')"
+                class="absolute bottom-4 left-4 bg-yellow-500 hover:bg-yellow-600 text-gray-900 px-5 py-2 rounded-full text-sm font-bold shadow-lg transition transform active:scale-95 flex items-center gap-2 z-20"
+              >
+                <i class="fas fa-plus"></i> إضافة حكمة
+              </button>
+            </div>
+            <div class="flex-1 overflow-y-auto custom-scrollbar pr-2">
+              <div
+                class="grid grid-cols-1 gap-4 max-w-4xl mx-auto pb-20"
+                id="philosophy-container"
+              >
+                <!-- Philosophy items injected by JS -->
+              </div>
+            </div>
+          </div>
+
+          <!-- Quotes View -->
+          <div id="view-quotes" class="view hidden h-full flex flex-col">
+            <header class="mb-6 flex justify-between items-center">
+              <div>
+                <h1
+                  class="text-3xl font-bold text-white neon-text font-tajawal"
+                >
+                  عبارات ملهمة
+                </h1>
+                <p class="text-gray-400 text-sm">كلمات تخلد في الذاكرة</p>
+              </div>
+              <button
+                onclick="window.openModal('add-quote')"
+                class="bg-accent hover:bg-pink-600 text-white px-5 py-2 rounded-full text-sm font-bold shadow-lg transition transform active:scale-95 flex items-center gap-2"
+              >
+                <i class="fas fa-plus"></i> إضافة
+              </button>
+            </header>
+            <div class="flex-1 overflow-y-auto custom-scrollbar pr-2">
+              <div
+                class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 pb-20"
+                id="quotes-container"
+              >
+                <!-- Quotes injected by JS -->
+              </div>
+            </div>
+          </div>
+
+          <!-- Skills View -->
+          <div id="view-skills" class="view hidden h-full flex flex-col">
+            <header class="mb-6 flex justify-between items-center">
+              <h1 class="text-3xl font-bold text-white neon-text font-tajawal">
+                تطوير المهارات
+              </h1>
+              <button
+                onclick="window.openModal('add-skill')"
+                class="bg-accent hover:bg-pink-600 text-white px-5 py-2 rounded-full text-sm font-bold shadow-lg transition transform active:scale-95 flex items-center gap-2"
+              >
+                <i class="fas fa-plus"></i> إضافة مصدر
+              </button>
+            </header>
+            <nav
+              class="flex gap-4 overflow-x-auto pb-4 scrollbar-hide mb-4"
+              id="skills-filters"
+            >
+              <!-- Filters injected by JS -->
+            </nav>
+            <div class="flex-1 overflow-y-auto custom-scrollbar pr-2">
+              <div
+                class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 pb-20"
+                id="skills-container"
+              >
+                <!-- Skills injected by JS -->
+              </div>
+            </div>
+          </div>
+
+          <!-- Suggestions View -->
+          <div
+            id="view-suggestions"
+            class="view hidden h-full overflow-y-auto custom-scrollbar"
+          >
+            <div class="max-w-4xl mx-auto pb-20">
+              <div class="text-center mb-10">
+                <h2 class="text-3xl font-bold gradient-text mb-2">
+                  شاركنا رأيك
+                </h2>
+                <p class="text-gray-400">
+                  نحن نبني هذا المجتمع معاً. اقتراحاتكم تهمنا.
+                </p>
+              </div>
+              <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                <div class="glass-card p-6 rounded-3xl h-fit">
+                  <h3 class="text-xl font-bold mb-6 flex items-center gap-2">
+                    <span class="text-2xl">📝</span> نموذج المقترحات
+                  </h3>
+                  <div class="space-y-4">
+                    <div>
+                      <label class="block text-xs text-gray-400 mb-1"
+                        >نوع الرسالة</label
+                      >
+                      <select
+                        id="sugg-type"
+                        class="input-style w-full px-4 py-3 rounded-xl"
+                      >
+                        <option value="اقتراح">اقتراح</option>
+                        <option value="شكوى">شكوى</option>
+                        <option value="فكرة تطوير">فكرة تطوير</option>
+                      </select>
+                    </div>
+                    <input
+                      type="text"
+                      id="sugg-title"
+                      placeholder="الموضوع"
+                      class="input-style w-full px-4 py-3 rounded-xl"
+                    />
+                    <textarea
+                      id="sugg-content"
+                      placeholder="التفاصيل..."
+                      class="input-style w-full px-4 py-3 rounded-xl h-40 resize-none"
+                    ></textarea>
+                    <button
+                      id="btn-submit-sugg"
+                      class="btn-primary w-full py-3 rounded-xl font-bold shadow-lg"
+                    >
+                      إرسال
+                    </button>
+                  </div>
+                </div>
+                <div class="space-y-4">
+                  <h3 class="text-xl font-bold mb-2 flex items-center gap-2">
+                    <span class="text-2xl">🗂️</span> مقترحاتي السابقة
+                  </h3>
+                  <div id="suggestions-list" class="space-y-4">
+                    <!-- Suggestions injected by JS -->
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- User Profile View -->
+          <div
+            id="view-profile"
+            class="view hidden h-full overflow-y-auto custom-scrollbar"
+          >
+            <div class="max-w-4xl mx-auto pb-20">
+              <div
+                class="glass-card rounded-3xl p-8 mb-8 relative overflow-hidden"
+              >
+                <div
+                  class="absolute top-0 left-0 w-full h-32 bg-gradient-to-r from-pink-500/20 to-indigo-500/20"
+                ></div>
+                <div
+                  class="relative z-10 flex flex-col md:flex-row items-center md:items-end gap-6 mt-12"
+                >
+                  <div
+                    id="profile-avatar"
+                    class="w-32 h-32 rounded-full bg-gradient-to-br from-pink-500 to-orange-500 flex items-center justify-center text-5xl text-white shadow-xl border-4 border-[#0f172a]"
+                  >
+                    U
+                  </div>
+                  <div class="flex-1 text-center md:text-right">
+                    <h1
+                      id="profile-name"
+                      class="text-3xl font-bold text-white mb-2"
+                    >
+                      اسم المستخدم
+                    </h1>
+                    <p id="profile-specialty" class="text-gray-400 mb-4">
+                      التخصص
+                    </p>
+                    <div
+                      class="flex flex-wrap justify-center md:justify-start gap-2"
+                      id="profile-badges"
+                    >
+                      <!-- Badges injected here -->
+                    </div>
+                  </div>
+                  <div class="flex gap-4 text-center">
+                    <div class="bg-white/5 rounded-xl p-3 min-w-[80px]">
+                      <div
+                        id="profile-followers"
+                        class="text-2xl font-bold text-white"
+                      >
+                        0
+                      </div>
+                      <div class="text-xs text-gray-400">متابع</div>
+                    </div>
+                    <div class="bg-white/5 rounded-xl p-3 min-w-[80px]">
+                      <div
+                        id="profile-following"
+                        class="text-2xl font-bold text-white"
+                      >
+                        0
+                      </div>
+                      <div class="text-xs text-gray-400">يتابع</div>
+                    </div>
+                  </div>
+                </div>
+                <div
+                  class="mt-8 flex justify-center md:justify-end gap-4"
+                  id="profile-actions"
+                >
+                  <!-- Follow/Edit buttons injected here -->
+                </div>
+              </div>
+
+              <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <div class="md:col-span-2 space-y-6">
+                  <h3
+                    class="text-xl font-bold text-white border-b border-white/10 pb-4"
+                  >
+                    المنشورات
+                  </h3>
+                  <div id="profile-posts" class="space-y-6">
+                    <!-- Posts injected here -->
+                  </div>
+                </div>
+                <div class="space-y-6">
+                  <h3
+                    class="text-xl font-bold text-white border-b border-white/10 pb-4"
+                  >
+                    الإنجازات
+                  </h3>
+                  <div id="profile-achievements" class="space-y-4">
+                    <!-- Achievements injected here -->
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- About View -->
+          <div
+            id="view-about"
+            class="view hidden h-full overflow-y-auto custom-scrollbar"
+          >
+            <div class="max-w-3xl mx-auto pb-20">
+              <div
+                class="glass-card rounded-3xl p-10 text-center border-t-4 border-pink-500 relative overflow-hidden"
+              >
+                <div
+                  class="absolute top-0 left-0 w-full h-full bg-gradient-to-b from-pink-500/10 to-transparent pointer-events-none"
+                ></div>
+                <div class="flex justify-center mb-8">
+                  <span class="text-8xl">🏛️</span>
+                </div>
+                <h1 class="text-4xl font-bold font-amiri gradient-text mb-4">
+                  متحف الفكر
+                </h1>
+                <p class="text-xl text-gray-300 font-amiri mb-8">
+                  بوابة الإبداع الفكري لجامعة زيان عاشور بالجلفة
+                </p>
+
+                <div
+                  class="space-y-6 text-right font-light text-gray-300 leading-relaxed bg-black/20 p-6 rounded-2xl"
+                >
+                  <p>
+                    <strong class="text-white block mb-2 text-lg"
+                      >💡 الرؤية:</strong
+                    >
+                    متحف الفكر هو فضاء رقمي حر يهدف إلى جمع الأفكار الإبداعية
+                    والمقالات العلمية والخواطر الفلسفية في مكان واحد، ليكون
+                    مرجعاً لكل طالب وباحث عن المعرفة.
+                  </p>
+                  <p>
+                    <strong class="text-white block mb-2 text-lg"
+                      >🚀 الرسالة:</strong
+                    >
+                    تمكين الطلبة والمفكرين من مشاركة إبداعاتهم، وتوفير بيئة
+                    تفاعلية راقية لتبادل الآراء وتطوير المهارات بعيداً عن ضوضاء
+                    منصات التواصل الاجتماعي التقليدية.
+                  </p>
+                </div>
+
+                <div class="mt-10 grid grid-cols-2 gap-4">
+                  <div class="p-4 rounded-xl bg-white/5 border border-white/10">
+                    <i class="fas fa-code text-3xl text-pink-500 mb-2"></i>
+                    <h3 class="font-bold">تطوير</h3>
+                    <p class="text-xs text-gray-400">فريق MUF التقني</p>
+                  </div>
+                  <div class="p-4 rounded-xl bg-white/5 border border-white/10">
+                    <i
+                      class="fas fa-university text-3xl text-yellow-400 mb-2"
+                    ></i>
+                    <h3 class="font-bold">إشراف</h3>
+                    <p class="text-xs text-gray-400">جامعة الجلفة</p>
+                  </div>
+                </div>
+                <div class="mt-8 text-xs text-gray-500">
+                  الإصدار 2.0.0 &copy; 2025 جميع الحقوق محفوظة
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Admin Dashboard View -->
+          <div
+            id="view-admin"
+            class="view hidden h-full overflow-y-auto custom-scrollbar"
+          >
+            <div class="max-w-6xl mx-auto pb-20">
+              <header
+                class="mb-8 flex justify-between items-center bg-gray-800/50 p-6 rounded-2xl border border-white/10"
+              >
+                <div>
+                  <h1 class="text-3xl font-bold text-white font-tajawal mb-2">
+                    <i class="fas fa-shield-alt text-red-500 mr-2"></i> لوحة
+                    تحكم المشرف
+                  </h1>
+                  <p class="text-gray-400 text-sm">إدارة النظام والمستخدمين</p>
+                </div>
+                <div class="flex gap-3">
+                  <button
+                    onclick="window.exportData()"
+                    class="btn-secondary px-4 py-2 rounded-xl text-sm flex items-center gap-2"
+                  >
+                    <i class="fas fa-download"></i> تصدير البيانات
+                  </button>
+                </div>
+              </header>
+
+              <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+                <div
+                  class="glass-card p-6 rounded-2xl border-t-4 border-blue-500"
+                >
+                  <h3 class="text-gray-400 mb-2">إجمالي المستخدمين</h3>
+                  <p
+                    class="text-3xl font-bold text-white"
+                    id="admin-stats-users"
+                  >
+                    0
+                  </p>
+                </div>
+                <div
+                  class="glass-card p-6 rounded-2xl border-t-4 border-green-500"
+                >
+                  <h3 class="text-gray-400 mb-2">إجمالي المنشورات</h3>
+                  <p
+                    class="text-3xl font-bold text-white"
+                    id="admin-stats-posts"
+                  >
+                    0
+                  </p>
+                </div>
+                <div
+                  class="glass-card p-6 rounded-2xl border-t-4 border-yellow-500"
+                >
+                  <h3 class="text-gray-400 mb-2">الاقتراحات المعلقة</h3>
+                  <p
+                    class="text-3xl font-bold text-white"
+                    id="admin-stats-suggestions"
+                  >
+                    0
+                  </p>
+                </div>
+              </div>
+
+              <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                <!-- Users Management -->
+                <div class="glass-card rounded-3xl p-6 flex flex-col h-[500px]">
+                  <h2
+                    class="text-xl font-bold text-white mb-4 border-b border-white/10 pb-3"
+                  >
+                    <i class="fas fa-users mr-2"></i> إدارة الأعضاء
+                  </h2>
+                  <div
+                    class="flex-1 overflow-y-auto custom-scrollbar pr-2 space-y-3"
+                    id="admin-users-list"
+                  >
+                    <!-- Users injected here -->
+                  </div>
+                </div>
+
+                <!-- Suggestions Management -->
+                <div class="glass-card rounded-3xl p-6 flex flex-col h-[500px]">
+                  <h2
+                    class="text-xl font-bold text-white mb-4 border-b border-white/10 pb-3"
+                  >
+                    <i class="fas fa-envelope mr-2"></i> إدارة الرسائل
+                    والاقتراحات
+                  </h2>
+                  <div
+                    class="flex-1 overflow-y-auto custom-scrollbar pr-2 space-y-4"
+                    id="admin-suggestions-list"
+                  >
+                    <!-- Suggestions injected here -->
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Reels View -->
+          <div
+            id="view-reels"
+            class="view hidden h-full bg-black relative rounded-3xl overflow-hidden"
+          >
+            <button
+              onclick="window.navigateTo('feed')"
+              class="absolute top-4 right-4 z-50 w-10 h-10 bg-black/50 rounded-full text-white flex items-center justify-center hover:bg-white/20 transition backdrop-blur-md"
+            >
+              <i class="fas fa-times"></i>
+            </button>
+            <div
+              id="reels-container"
+              class="h-full w-full overflow-y-scroll snap-y snap-mandatory scrollbar-hide"
+            >
+              <!-- Reels injected here -->
+            </div>
+          </div>
+        </div>
+      </main>
+    </div>
+
+    <!-- Modals -->
+    <div
+      id="modal-overlay"
+      class="fixed inset-0 z-[60] bg-black/80 hidden items-center justify-center p-4 backdrop-blur-sm opacity-0 transition-opacity duration-300"
+    >
+      <div
+        id="modal-content"
+        class="bg-[#0f172a] border border-white/10 rounded-3xl w-full max-w-lg shadow-2xl transform scale-95 transition-transform duration-300 overflow-hidden flex flex-col max-h-[90vh]"
+      >
+        <div
+          class="p-6 border-b border-white/10 flex justify-between items-center shrink-0"
+        >
+          <h3 id="modal-title" class="text-xl font-bold font-amiri text-white">
+            العنوان
+          </h3>
+          <button
+            onclick="window.closeModal()"
+            class="text-gray-400 hover:text-white transition"
+          >
+            <i class="fas fa-times text-xl"></i>
+          </button>
+        </div>
+        <div id="modal-body" class="p-6 overflow-y-auto custom-scrollbar">
+          <!-- Dynamic Content -->
+        </div>
+      </div>
+    </div>
+
+    <!-- Comments Modal -->
+    <div
+      id="comments-modal"
+      class="fixed inset-0 z-[65] bg-black/80 hidden items-center justify-center p-4 backdrop-blur-sm opacity-0 transition-opacity duration-300"
+    >
+      <div
+        class="bg-[#0f172a] border border-white/10 rounded-3xl w-full max-w-lg shadow-2xl transform scale-95 transition-transform duration-300 overflow-hidden flex flex-col h-[80vh]"
+      >
+        <div
+          class="p-4 border-b border-white/10 flex justify-between items-center shrink-0 bg-gray-800"
+        >
+          <h3 class="text-lg font-bold text-white">التعليقات</h3>
+          <button
+            onclick="window.closeCommentsModal()"
+            class="text-gray-400 hover:text-white transition"
+          >
+            <i class="fas fa-times text-xl"></i>
+          </button>
+        </div>
+        <div
+          id="comments-list"
+          class="flex-1 overflow-y-auto p-4 space-y-4 custom-scrollbar"
+        >
+          <!-- Comments injected here -->
+        </div>
+        <div class="p-4 border-t border-white/10 bg-gray-800 shrink-0">
+          <div class="flex gap-2">
+            <input
+              type="text"
+              id="new-comment-text"
+              placeholder="اكتب تعليقاً..."
+              class="input-style flex-1 rounded-full px-4 py-2"
+            />
+            <button
+              id="btn-submit-comment"
+              class="w-10 h-10 bg-accent rounded-full text-white flex items-center justify-center hover:bg-pink-600 transition"
+            >
+              <i class="fas fa-paper-plane"></i>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Toast Container -->
+    <div
+      id="toast-container"
+      class="fixed bottom-4 left-4 z-[70] flex flex-col gap-2 pointer-events-none"
+    ></div>
+
+    <script type="module" src="firebase-config.js"></script>
+    <script type="module" src="script.js"></script>
+  </body>
+</html>

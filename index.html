@@ -1,0 +1,213 @@
+<!doctype html>
+<html lang="ar" dir="rtl" class="h-full">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
+    />
+    <title>متحف الفكر - بوابة الإبداع الفكري</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Tajawal:wght@300;400;500;700;800&family=Amiri:wght@400;700&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            colors: {
+              dark: "#0f172a",
+              card: "#1e293b",
+              primary: "#6366f1",
+              accent: "#ec4899",
+              glow: "#f59e0b",
+            },
+            fontFamily: {
+              tajawal: ["Tajawal", "sans-serif"],
+              amiri: ["Amiri", "serif"],
+            },
+          },
+        },
+      };
+    </script>
+    <style>
+      body {
+        font-family: "Tajawal", sans-serif;
+        background: radial-gradient(circle at top left, #1a1b4b, #0f1020);
+        color: #e2e8f0;
+        overflow-x: hidden;
+        font-size: 15px;
+      }
+      @media (max-width: 768px) {
+        html {
+          font-size: 14px;
+        }
+      }
+      @media (min-width: 769px) {
+        html {
+          font-size: 16px;
+        }
+      }
+      /* Scrollbar */
+      ::-webkit-scrollbar {
+        width: 6px;
+        height: 6px;
+      }
+      ::-webkit-scrollbar-track {
+        background: #0f1020;
+      }
+      ::-webkit-scrollbar-thumb {
+        background: #334155;
+        border-radius: 10px;
+      }
+      ::-webkit-scrollbar-thumb:hover {
+        background: #475569;
+      }
+
+      .scrollbar-hide::-webkit-scrollbar {
+        display: none;
+      }
+      .scrollbar-hide {
+        -ms-overflow-style: none;
+        scrollbar-width: none;
+      }
+
+      /* Effects */
+      .neon-text {
+        text-shadow: 0 0 10px rgba(255, 255, 255, 0.3);
+      }
+      .active-tab {
+        background: linear-gradient(90deg, #ec4899, #f59e0b);
+        box-shadow: 0 0 15px rgba(236, 72, 153, 0.4);
+        border: none;
+        color: white !important;
+      }
+      .card-hover {
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      }
+      .card-hover:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 20px 40px -20px rgba(99, 102, 241, 0.4);
+        border-color: rgba(236, 72, 153, 0.4);
+        background: rgba(255, 255, 255, 0.1);
+      }
+      .glass {
+        background: rgba(30, 41, 59, 0.5);
+        backdrop-filter: blur(12px);
+        -webkit-backdrop-filter: blur(12px);
+        border: 1px solid rgba(255, 255, 255, 0.08);
+      }
+
+      /* Animations */
+      @keyframes float {
+        0%,
+        100% {
+          transform: translateY(0px);
+        }
+        50% {
+          transform: translateY(-10px);
+        }
+      }
+      @keyframes blob {
+        0% {
+          transform: translate(0px, 0px) scale(1);
+        }
+        33% {
+          transform: translate(30px, -50px) scale(1.1);
+        }
+        66% {
+          transform: translate(-20px, 20px) scale(0.9);
+        }
+        100% {
+          transform: translate(0px, 0px) scale(1);
+        }
+      }
+      @keyframes fade-in {
+        from {
+          opacity: 0;
+          transform: translateY(10px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      .animate-float {
+        animation: float 4s ease-in-out infinite;
+      }
+      .animate-blob {
+        animation: blob 10s infinite;
+      }
+      .animate-fade-in {
+        animation: fade-in 0.5s ease-out forwards;
+      }
+
+      .gradient-text {
+        background: linear-gradient(135deg, #ec4899, #f59e0b);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+      }
+
+      .input-style {
+        background: rgba(15, 23, 42, 0.6);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        color: white;
+        transition: all 0.3s;
+      }
+      .input-style:focus {
+        background: rgba(15, 23, 42, 0.8);
+        border-color: #ec4899;
+        outline: none;
+        box-shadow: 0 0 0 2px rgba(236, 72, 153, 0.2);
+      }
+      .btn-primary {
+        background: linear-gradient(135deg, #ec4899, #db2777);
+        color: white;
+        transition: all 0.3s;
+        font-weight: bold;
+      }
+      .btn-primary:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 10px 20px -10px rgba(236, 72, 153, 0.6);
+      }
+
+      /* Masonry Grid Fixes */
+      .masonry {
+        columns: 1;
+        gap: 1.5rem;
+      }
+      @media (min-width: 768px) {
+        .masonry {
+          columns: 2;
+        }
+      }
+      @media (min-width: 1024px) {
+        .masonry {
+          columns: 3;
+        }
+      }
+      @media (min-width: 1280px) {
+        .masonry {
+          columns: 4;
+        }
+      }
+      .break-inside-avoid {
+        break-inside: avoid;
+        margin-bottom: 1.5rem;
+      }
+    </style>
+  </head>
+  <body
+    class="h-full w-full text-gray-200 overflow-hidden selection:bg-accent selection:text-white"
+  >
+    <div id="root" class="h-full w-full"></div>
+    <script type="module" src="/index.tsx"></script>
+  </body>
+</html>

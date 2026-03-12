@@ -1,0 +1,206 @@
+{
+  "entities": {
+    "User": {
+      "title": "User",
+      "description": "A user of the platform",
+      "type": "object",
+      "properties": {
+        "name": { "type": "string", "description": "Display name" },
+        "email": { "type": "string", "format": "email" },
+        "bio": { "type": "string", "description": "User biography" },
+        "specialty": { "type": "string" },
+        "role": { "type": "string", "enum": ["admin", "user"] },
+        "isBanned": { "type": "boolean" },
+        "authMethod": { "type": "string" },
+        "emailVerified": { "type": "boolean" },
+        "photoURL": { "type": "string" },
+        "followersCount": { "type": "number" },
+        "followingCount": { "type": "number" },
+        "createdAt": { "type": "string", "format": "date-time" },
+        "lastLogin": { "type": "string", "format": "date-time" }
+      },
+      "required": ["name", "email", "role", "isBanned", "createdAt"]
+    },
+    "Follow": {
+      "title": "Follow",
+      "description": "A follow relationship",
+      "type": "object",
+      "properties": {
+        "followerId": { "type": "string" },
+        "followingId": { "type": "string" },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["followerId", "followingId", "createdAt"]
+    },
+    "Idea": {
+      "title": "Idea",
+      "description": "An intellectual idea or article",
+      "type": "object",
+      "properties": {
+        "title": { "type": "string" },
+        "category": { "type": "string" },
+        "content": { "type": "string" },
+        "author": { "type": "string" },
+        "authorId": { "type": "string" },
+        "authorRole": { "type": "string", "enum": ["admin", "user"] },
+        "views": { "type": "number" },
+        "likes": { "type": "number" },
+        "likedBy": { "type": "array", "items": { "type": "string" } },
+        "featured": { "type": "boolean" },
+        "deleted": { "type": "boolean" },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["title", "content", "authorId", "createdAt"]
+    },
+    "Comment": {
+      "title": "Comment",
+      "description": "A comment on an idea or library item",
+      "type": "object",
+      "properties": {
+        "targetId": { "type": "string" },
+        "targetType": { "type": "string", "enum": ["idea", "library"] },
+        "text": { "type": "string" },
+        "userId": { "type": "string" },
+        "authorName": { "type": "string" },
+        "authorRole": { "type": "string", "enum": ["admin", "user"] },
+        "likes": { "type": "number" },
+        "likedBy": { "type": "array", "items": { "type": "string" } },
+        "parentCommentId": { "type": "string" },
+        "replies": { "type": "number" },
+        "deleted": { "type": "boolean" },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["targetId", "targetType", "text", "userId", "createdAt"]
+    },
+    "Course": {
+      "title": "Course",
+      "description": "A learning resource or course",
+      "type": "object",
+      "properties": {
+        "title": { "type": "string" },
+        "type": { "type": "string" },
+        "description": { "type": "string" },
+        "link": { "type": "string" },
+        "addedBy": { "type": "string" },
+        "addedByRole": { "type": "string", "enum": ["admin", "user"] },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["title", "link", "addedBy", "createdAt"]
+    },
+    "Quote": {
+      "title": "Quote",
+      "description": "An inspirational quote",
+      "type": "object",
+      "properties": {
+        "text": { "type": "string" },
+        "author": { "type": "string" },
+        "isDefault": { "type": "boolean" },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["text", "author", "createdAt"]
+    },
+    "Suggestion": {
+      "title": "Suggestion",
+      "description": "A user suggestion",
+      "type": "object",
+      "properties": {
+        "type": { "type": "string" },
+        "title": { "type": "string" },
+        "content": { "type": "string" },
+        "author": { "type": "string" },
+        "authorId": { "type": "string" },
+        "status": {
+          "type": "string",
+          "enum": ["pending", "approved", "rejected", "replied"]
+        },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["title", "content", "authorId", "status", "createdAt"]
+    },
+    "Message": {
+      "title": "Message",
+      "description": "A message between users or to admin",
+      "type": "object",
+      "properties": {
+        "title": { "type": "string" },
+        "content": { "type": "string" },
+        "from": { "type": "string" },
+        "fromId": { "type": "string" },
+        "read": { "type": "boolean" },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["title", "content", "fromId", "createdAt"]
+    },
+    "Bookmark": {
+      "title": "Bookmark",
+      "description": "A bookmarked course",
+      "type": "object",
+      "properties": {
+        "userId": { "type": "string" },
+        "courseId": { "type": "string" },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["userId", "courseId", "createdAt"]
+    },
+    "LibraryItem": {
+      "title": "LibraryItem",
+      "description": "A book (PDF) or image resource",
+      "type": "object",
+      "properties": {
+        "title": { "type": "string" },
+        "description": { "type": "string" },
+        "type": { "type": "string", "enum": ["book", "image"] },
+        "fileUrl": { "type": "string" },
+        "thumbnailUrl": { "type": "string" },
+        "author": { "type": "string" },
+        "authorId": { "type": "string" },
+        "authorRole": { "type": "string", "enum": ["admin", "user"] },
+        "likes": { "type": "number" },
+        "likedBy": { "type": "array", "items": { "type": "string" } },
+        "views": { "type": "number" },
+        "deleted": { "type": "boolean" },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["title", "type", "fileUrl", "authorId", "createdAt"]
+    }
+  },
+  "firestore": {
+    "/users/{userId}": { "schema": "User", "description": "User profiles" },
+    "/ideas/{ideaId}": {
+      "schema": "Idea",
+      "description": "Intellectual ideas"
+    },
+    "/comments/{commentId}": {
+      "schema": "Comment",
+      "description": "Comments on ideas"
+    },
+    "/courses/{courseId}": {
+      "schema": "Course",
+      "description": "Learning resources"
+    },
+    "/quotes/{quoteId}": {
+      "schema": "Quote",
+      "description": "Inspirational quotes"
+    },
+    "/suggestions/{suggestionId}": {
+      "schema": "Suggestion",
+      "description": "User suggestions"
+    },
+    "/messages/{messageId}": {
+      "schema": "Message",
+      "description": "System messages"
+    },
+    "/bookmarks/{bookmarkId}": {
+      "schema": "Bookmark",
+      "description": "User bookmarks"
+    },
+    "/follows/{followId}": {
+      "schema": "Follow",
+      "description": "User follow relationships"
+    },
+    "/library/{itemId}": {
+      "schema": "LibraryItem",
+      "description": "Library resources (books/images)"
+    }
+  }
+}

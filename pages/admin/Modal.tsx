@@ -13,7 +13,7 @@ export const Modal: React.FC<ModalProps> = ({
   title,
   children,
 }) => {
-  // دالة ذكية للتعرف على اللغة بناءً على أول حرف في العنوان
+  // دالة اكتشاف اللغة
   const isArabic = (text: string) => /[\u0600-\u06FF]/.test(text);
   const dir = isArabic(title) ? "rtl" : "ltr";
 
@@ -30,47 +30,48 @@ export const Modal: React.FC<ModalProps> = ({
 
   return (
     <div 
-      className="fixed inset-0 z-[999] flex items-start justify-center bg-black/80 backdrop-blur-md p-4 overflow-y-auto pt-[8vh] pb-10"
+      className="fixed inset-0 z-[999] flex items-center justify-center bg-black/85 backdrop-blur-lg p-3 md:p-6"
       onClick={onClose} 
     >
-      {/* الإضافات المطلوبة:
-         1. mt-[5vh]: إزاحة مدروسة من الأعلى لترك مساحة جمالية.
-         2. min-h-[75vh]: تكبير حدود النافذة طوليًا لتبدو كاملة وفخمة.
-         3. dir={dir}: تبديل الاتجاه تلقائيًا حسب لغة النص.
+      {/* التعديلات لتحقيق مظهر "الكتلة الواحدة":
+         1. items-center: لمركزة النافذة في وسط الشاشة تماماً.
+         2. h-auto & max-h-[92vh]: لتجعل النافذة وحدة واحدة تتمدد حسب المحتوى دون قص.
+         3. shadow-white/5: إضافة توهج خفيف لتبدو ككتلة بارزة.
       */}
       <div 
         dir={dir}
-        className={`glass-dark rounded-[3rem] w-full max-w-lg shadow-2xl border border-white/10 animate-slide-down relative 
-          flex flex-col min-h-[75vh] h-fit transition-all duration-500
+        className={`glass-dark rounded-[2.5rem] w-full max-w-lg shadow-[0_0_50px_rgba(255,255,255,0.05)] 
+          border border-white/10 animate-scale-in relative flex flex-col h-auto max-h-[92vh] transition-all duration-500
           ${dir === "rtl" ? "font-tajawal text-right" : "font-sans text-left"}`}
         onClick={(e) => e.stopPropagation()} 
       >
         
-        {/* رأس النافذة: يتغير ترتيب العناصر فيه حسب اللغة */}
-        <div className={`p-8 pb-6 flex justify-between items-start shrink-0 ${dir === 'rtl' ? 'flex-row' : 'flex-row-reverse'}`}>
+        {/* رأس النافذة - مدمج بانسيابية */}
+        <div className={`p-6 pb-2 flex justify-between items-center ${dir === 'rtl' ? 'flex-row' : 'flex-row-reverse'}`}>
+          <div className="flex flex-col">
+            <h3 className="text-xl md:text-2xl font-bold gradient-text leading-tight">{title}</h3>
+            <span className="text-[10px] text-pink-400/70 font-tajawal">
+              {dir === "rtl" ? "صاحبة الفكرة: رشا سعاد الشعيبي" : "Idea by: Rasha Suad"}
+            </span>
+          </div>
+
           <button
             onClick={onClose}
-            className="w-10 h-10 flex items-center justify-center rounded-full bg-white/5 hover:bg-red-500/20 hover:text-red-400 transition-all text-3xl text-gray-400"
+            className="w-9 h-9 flex items-center justify-center rounded-full bg-white/5 hover:bg-red-500/20 hover:text-red-400 transition-all text-2xl text-gray-400"
           >
             &times;
           </button>
-
-          <div className="flex flex-col">
-            <h3 className="text-2xl md:text-3xl font-bold gradient-text leading-tight">{title}</h3>
-            <span className="text-[11px] text-pink-400/80 mt-2 opacity-90 tracking-wide">
-              {dir === "rtl" ? "صاحبة الفكرة: رشا سعاد الشعيبي" : "Idea Owner: Rasha Suad Al-Shuaibi"}
-            </span>
-          </div>
         </div>
 
-        {/* منطقة المحتوى: pb-24 تضمن بقاء زر النشر مرتفعاً وواضحاً داخل النافذة */}
-        <div className="px-8 pt-2 pb-24 flex-1">
+        {/* منطقة المحتوى - تم تقليل الحواشي (Padding) لتظهر الكتلة متصلة ببعضها */}
+        <div className="px-6 py-4 overflow-visible">
           {children}
         </div>
 
-        {/* تذييل النافذة: يظهر في أسفل النافذة الطويلة كما في صورتك تماماً */}
-        <div className="absolute bottom-8 left-0 w-full text-center">
-           <p className="text-[10px] text-gray-500 uppercase tracking-[0.4em] font-bold opacity-60">
+        {/* تذييل النافذة - ملتصق بالكتلة وليس بعيداً عنها */}
+        <div className="pb-6 pt-2 text-center shrink-0">
+           <div className="h-[1px] w-1/4 bg-white/5 mx-auto mb-4"></div>
+           <p className="text-[9px] text-gray-500 uppercase tracking-[0.3em] font-bold">
              DEVELOPED BY MU_CS_01 | 2026
            </p>
         </div>

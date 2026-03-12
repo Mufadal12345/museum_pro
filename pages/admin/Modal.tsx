@@ -26,20 +26,20 @@ export const Modal: React.FC<ModalProps> = ({
 
   return (
     <div 
-      className="fixed inset-0 z-[999] flex items-start justify-center bg-black/80 backdrop-blur-md p-4 pt-10 md:pt-16 overflow-y-auto"
+      className="fixed inset-0 z-[999] flex items-start justify-center bg-black/80 backdrop-blur-md p-4 overflow-y-auto"
       onClick={onClose} 
     >
-      {/* التعديلات الجوهرية:
-        1. min-h-[500px]: يضمن أن النافذة لن تكون قصيرة أبداً.
-        2. h-fit: يجعل النافذة تتمدد إذا كان المحتوى أكبر من 500 بكسل.
-        3. pb-12: يضيف مساحة كبيرة في الأسفل لضمان ظهور زر النشر بوضوح.
+      {/* التعديل هنا: 
+         1. mt-20 أو mt-[15vh]: لجعل النافذة منخفضة قليلاً عن الحافة العلوية.
+         2. min-h-[500px]: لضمان طول النافذة حتى يظهر الزر.
+         3. mb-10: لترك مسافة في الأسفل لسهولة التمرير.
       */}
       <div 
-        className="glass-dark rounded-[2.5rem] w-full max-w-md shadow-2xl border border-white/10 animate-slide-down relative min-h-[550px] h-fit flex flex-col mb-20"
+        className="glass-dark rounded-[2.5rem] w-full max-w-md shadow-2xl border border-white/10 animate-slide-down relative mt-16 md:mt-24 min-h-[500px] flex flex-col mb-10"
         onClick={(e) => e.stopPropagation()} 
       >
         
-        {/* رأس النافذة الثابت */}
+        {/* رأس النافذة */}
         <div className="p-6 pb-4 shrink-0 flex justify-between items-start">
           <div className="flex flex-col">
             <h3 className="text-2xl font-bold gradient-text font-tajawal leading-tight">{title}</h3>
@@ -54,13 +54,13 @@ export const Modal: React.FC<ModalProps> = ({
           </button>
         </div>
 
-        {/* منطقة المحتوى: أضفنا Padding سفلي إضافي (pb-16) لرفع زر النشر للأعلى قليلاً */}
-        <div className="p-6 pt-2 pb-16">
+        {/* منطقة المحتوى مع مساحة داخلية كافية في الأسفل لزر النشر */}
+        <div className="p-6 pt-2 pb-12">
           {children}
         </div>
 
-        {/* تذييل النافذة - مثبت في أسفل النافذة الطويلة */}
-        <div className="absolute bottom-4 left-0 w-full text-center">
+        {/* تذييل النافذة */}
+        <div className="mt-auto pb-6 text-center shrink-0">
            <p className="text-[9px] text-gray-500 uppercase tracking-widest font-medium">
              Developed by mu_cs_01 | 2026
            </p>
